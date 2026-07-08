@@ -22,8 +22,8 @@ import { Badge } from "@/components/ui/badge";
 import {
   Sheet,
   SheetContent,
-  SheetTrigger,
 } from "@/components/ui/sheet";
+import ModeToggle from "./ModeToggle";
 
 const navItems = [
   { path: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -41,6 +41,10 @@ export default function AppLayout() {
   const navigate = useNavigate();
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(() => {
+    const saved = localStorage.getItem("sidebar-open");
+    return saved !== "false";
+  });
 
   // Redirect if not authenticated
   useEffect(() => {
@@ -66,6 +70,18 @@ export default function AppLayout() {
     refetchInterval: 60000,
   });
 
+  const handleToggle = () => {
+    if (window.innerWidth < 1024) {
+      setMobileOpen(true);
+    } else {
+      setSidebarOpen((prev) => {
+        const next = !prev;
+        localStorage.setItem("sidebar-open", String(next));
+        return next;
+      });
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center gradient-hero">
@@ -79,9 +95,9 @@ export default function AppLayout() {
   const currentPath = location.pathname;
 
   const NavContent = () => (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full bg-card">
       {/* Logo */}
-      <Link to="/" className="flex items-center gap-2 px-4 py-5">
+      <Link to="/" className="flex items-center gap-2 px-4 py-5 border-b border-border/40">
         <div className="w-9 h-9 rounded-lg gradient-accent flex items-center justify-center">
           <Zap className="w-5 h-5 text-white" />
         </div>
@@ -92,7 +108,7 @@ export default function AppLayout() {
       </Link>
 
       {/* Credit Balance */}
-      <div className="mx-3 mb-4 p-3 rounded-xl glass-dark">
+      <div className="mx-3 mt-4 mb-4 p-3 rounded-xl glass-dark">
         <div className="flex items-center gap-2 text-xs text-muted-foreground mb-1">
           <CreditCard className="w-3 h-3" />
           <span>Credit Balance</span>
@@ -104,7 +120,7 @@ export default function AppLayout() {
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 px-3 space-y-1">
+      <nav className="flex-1 px-3 space-y-1 overflow-y-auto">
         {navItems.map((item) => {
           const isActive = currentPath === item.path || currentPath.startsWith(`${item.path}/`);
           const Icon = item.icon;
@@ -136,7 +152,7 @@ export default function AppLayout() {
         <div className="flex items-center gap-3 px-2 py-2">
           <Avatar className="w-8 h-8">
             <AvatarImage src={user?.avatar ?? undefined} />
-            <AvatarFallback className="text-xs bg-primary/20">
+            <AvatarFallback className="text-xs bg-primary/20 font-semibold">
               {user?.name?.[0]?.toUpperCase() ?? "U"}
             </AvatarFallback>
           </Avatar>
@@ -159,50 +175,106 @@ export default function AppLayout() {
   );
 
   return (
-    <div className="min-h-screen flex">
-      {/* Desktop Sidebar */}
-      <aside className="hidden lg:flex w-64 flex-col border-r border-border/50 bg-card/50 backdrop-blur-xl fixed h-screen z-30">
+    <div className="min-h-screen flex bg-background text-foreground">
+      {/* Desktop Sidebar (collapsible) */}
+      <aside
+        className={`hidden lg:flex flex-col border-r border-border/50 bg-card/50 backdrop-blur-xl fixed h-screen z-30 transition-all duration-300 ease-in-out ${
+          sidebarOpen ? "w-64 translate-x-0" : "w-64 -translate-x-full"
+        }`}
+      >
         <NavContent />
       </aside>
 
-      {/* Mobile Header */}
-      <div className="lg:hidden fixed top-0 left-0 right-0 z-40 border-b border-border/50 bg-card/80 backdrop-blur-xl">
-        <div className="flex items-center justify-between px-4 py-3">
-          <Link to="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg gradient-accent flex items-center justify-center">
-              <Zap className="w-4 h-4 text-white" />
+      {/* Mobile Drawer (Sheet) */}
+      <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
+        <SheetContent side="left" className="w-72 p-0 border-r border-border/50 bg-card/50 backdrop-blur-xl">
+          <NavContent />
+        </SheetContent>
+      </Sheet>
+
+      {/* Main App Container */}
+      <div
+        className={`flex-1 flex flex-col min-w-0 transition-all duration-300 ease-in-out ${
+          sidebarOpen ? "lg:pl-64" : "lg:pl-0"
+        }`}
+      >
+        {/* Unified Top Header */}
+        <header className="sticky top-0 z-40 w-full border-b border-border/50 bg-card/80 backdrop-blur-xl h-16 flex items-center justify-between px-4 shrink-0">
+          <div className="flex items-center gap-3">
+            {/* Hamburger menu button for both desktop and mobile */}
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={handleToggle}
+              className="text-muted-foreground hover:text-foreground hover:bg-secondary/60 transition-colors"
+            >
+              <Menu className="w-5 h-5" />
+              <span className="sr-only">Toggle Sidebar</span>
+            </Button>
+
+            {/* Brand Logo - visible always on mobile, and on desktop only when sidebar is closed */}
+            <div
+              className={`transition-all duration-300 flex items-center ${
+                sidebarOpen ? "lg:opacity-0 lg:pointer-events-none" : "opacity-100"
+              }`}
+            >
+              <Link to="/" className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg gradient-accent flex items-center justify-center shadow-md">
+                  <Zap className="w-4 h-4 text-white" />
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-sm font-bold text-gradient leading-tight">SkillSwap</span>
+                  <span className="text-[9px] text-muted-foreground uppercase tracking-wider font-semibold">Sync</span>
+                </div>
+              </Link>
             </div>
-            <span className="text-base font-bold text-gradient">SkillSwap</span>
-          </Link>
-          <div className="flex items-center gap-2">
-            <Link to="/notifications" className="relative p-2">
-              <Bell className="w-5 h-5 text-muted-foreground" />
+          </div>
+
+          {/* Right side: quick stats and user links */}
+          <div className="flex items-center gap-3">
+            {/* Credit Balance Badge */}
+            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-secondary/40 border border-border/40 hover:bg-secondary/60 transition-colors">
+              <CreditCard className="w-3.5 h-3.5 text-primary" />
+              <span className="font-bold text-gradient text-xs">{creditData?.balance ?? 0}</span>
+              <span className="text-[9px] text-muted-foreground font-medium hidden sm:inline">credits</span>
+            </div>
+
+            {/* Notifications Shortcut */}
+            <Link
+              to="/notifications"
+              className="relative p-2 rounded-full hover:bg-secondary/60 text-muted-foreground hover:text-foreground transition-all duration-200"
+            >
+              <Bell className="w-4.5 h-4.5" />
               {unreadCount && unreadCount.count > 0 && (
-                <Badge variant="destructive" className="absolute top-0.5 right-0.5 h-4 min-w-4 text-[9px] p-0 flex items-center justify-center">
+                <Badge
+                  variant="destructive"
+                  className="absolute top-0.5 right-0.5 h-4 min-w-4 text-[9px] p-0 flex items-center justify-center border border-background shadow-sm"
+                >
                   {unreadCount.count}
                 </Badge>
               )}
             </Link>
-            <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
-              <SheetTrigger asChild>
-                <Button variant="ghost" size="icon">
-                  <Menu className="w-5 h-5" />
-                </Button>
-              </SheetTrigger>
-              <SheetContent side="left" className="w-72 p-0 gradient-hero">
-                <NavContent />
-              </SheetContent>
-            </Sheet>
-          </div>
-        </div>
-      </div>
 
-      {/* Main Content */}
-      <main className="flex-1 lg:ml-64 min-h-screen">
-        <div className="pt-16 lg:pt-0">
+            {/* Theme Selector Toggle */}
+            <ModeToggle />
+
+            {/* Profile Avatar Shortcut */}
+            <Link to="/profile" className="flex items-center">
+              <Avatar className="w-8 h-8 hover:ring-2 hover:ring-primary/40 transition-all duration-200 shadow-sm">
+                <AvatarImage src={user?.avatar ?? undefined} />
+                <AvatarFallback className="text-xs bg-primary/20 font-semibold">
+                  {user?.name?.[0]?.toUpperCase() ?? "U"}
+                </AvatarFallback>
+              </Avatar>
+            </Link>
+          </div>
+        </header>
+
+        {/* Page Content Viewport */}
+        <main className="flex-1">
           <Outlet />
-        </div>
-      </main>
+        </main>
+      </div>
     </div>
   );
 }

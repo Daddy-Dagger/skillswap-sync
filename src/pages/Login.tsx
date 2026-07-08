@@ -4,12 +4,14 @@ import { Button } from "@/components/ui/button";
 import { Zap, ArrowLeft, Sparkles, Users, Shield, TrendingUp } from "lucide-react";
 
 function getOAuthUrl() {
-  const kimiAuthUrl = import.meta.env.VITE_KIMI_AUTH_URL;
+  const baseAuthUrl = import.meta.env.DEV
+    ? window.location.origin
+    : (import.meta.env.VITE_KIMI_AUTH_URL || window.location.origin);
   const appID = import.meta.env.VITE_APP_ID;
   const redirectUri = `${window.location.origin}/api/oauth/callback`;
   const state = btoa(redirectUri);
 
-  const url = new URL(`${kimiAuthUrl}/api/oauth/authorize`);
+  const url = new URL("/api/oauth/authorize", baseAuthUrl);
   url.searchParams.set("client_id", appID);
   url.searchParams.set("redirect_uri", redirectUri);
   url.searchParams.set("response_type", "code");
@@ -54,8 +56,7 @@ export default function Login() {
                 window.location.href = getOAuthUrl();
               }}
             >
-              <Zap className="w-5 h-5" />
-              Sign in with Kimi
+              Sign in
             </Button>
 
             {/* Benefits */}

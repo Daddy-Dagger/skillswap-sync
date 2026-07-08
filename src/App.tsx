@@ -22,7 +22,7 @@ import NotFound from "./pages/NotFound";
 import AppLayout from "./components/AppLayout";
 
 export default function App() {
-  const { isAuthenticated, user, isLoading } = useAuth();
+  const { isLoading } = useAuth();
   const location = useLocation();
 
   // Scroll to top on route change
@@ -46,16 +46,14 @@ export default function App() {
     <>
       <Routes>
         {/* Public routes */}
-        <Route path="/" element={
-          isAuthenticated && user?.isOnboarded ? <Dashboard /> : <LandingPage />
-        } />
+        <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/leaderboard" element={<LeaderboardPage />} />
 
         {/* Protected routes with layout */}
         <Route element={<AppLayout />}>
           <Route path="/onboarding" element={<OnboardingPage />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/leaderboard" element={<LeaderboardPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/profile/:userId" element={<ProfilePage />} />
           <Route path="/discover" element={<SwipeMatchPage />} />

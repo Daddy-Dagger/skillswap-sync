@@ -4,15 +4,15 @@
 
 @layer base {
   :root {
-    /* Neutral Light Theme (Slate/Blue-grey base) */
-    --background: 210 40% 98%; /* Soft slate-white for layout background */
-    --foreground: 224 71.4% 4.1%; /* Deep slate-black (#020617) */
+    /* Neutral Soothing Light Theme (Slate/Blue-grey base) */
+    --background: 210 20% 98%; /* Soft slate-white for layout background */
+    --foreground: 224 71% 4%; /* Deep slate-black (#020617) */
     
     --card: 0 0% 100%; /* Pure white for card panels */
-    --card-foreground: 224 71.4% 4.1%;
+    --card-foreground: 224 71% 4%;
     
     --popover: 0 0% 100%;
-    --popover-foreground: 224 71.4% 4.1%;
+    --popover-foreground: 224 71% 4%;
     
     /* Brand Primary: Premium Indigo with WCAG AA compliance (contrast > 5.5:1) */
     --primary: 230 70% 48%; /* #2442e3 */
@@ -67,28 +67,28 @@
   }
 
   .dark {
-    /* Premium Dark Theme */
-    --background: 240 10% 4%; /* Dark Slate background (#0a0a0c) */
-    --foreground: 210 20% 98%; /* Soft white (#f8fafc) */
+    /* Premium Soothing Dark Theme */
+    --background: 222 47% 11%; /* Deep midnight charcoal/slate mix */
+    --foreground: 210 40% 96%; /* Soothing soft white */
     
-    --card: 240 10% 6%; /* Card dark elevation (#0e0e11) */
-    --card-foreground: 210 20% 98%;
+    --card: 217 33% 17%; /* Muted slate container */
+    --card-foreground: 210 40% 96%;
     
-    --popover: 240 10% 6%;
-    --popover-foreground: 210 20% 98%;
+    --popover: 217 33% 17%;
+    --popover-foreground: 210 40% 96%;
     
     /* Vibrant brand color for dark mode */
     --primary: 230 85% 65%; /* Bright indigo */
-    --primary-foreground: 240 10% 4%;
+    --primary-foreground: 222 47% 11%;
     
-    --secondary: 240 5% 14%;
-    --secondary-foreground: 210 20% 98%;
+    --secondary: 217 33% 17%;
+    --secondary-foreground: 210 40% 96%;
     
-    --muted: 240 5% 14%;
-    --muted-foreground: 240 5% 65%; /* Slate-400 */
+    --muted: 217 33% 17%;
+    --muted-foreground: 215 20% 65%; /* Soothing slate/blue-gray */
     
-    --accent: 240 5% 14%;
-    --accent-foreground: 210 20% 98%;
+    --accent: 217 33% 17%;
+    --accent-foreground: 210 40% 96%;
     
     --destructive: 0 63% 40%;
     --destructive-foreground: 0 0% 98%;
@@ -99,18 +99,18 @@
     --warning: 38 92% 55%;
     --warning-foreground: 0 0% 100%;
     
-    --border: 240 5% 15%; /* Muted dark border */
-    --input: 240 5% 15%;
+    --border: 217 30% 22%; /* Muted gray-blue borders */
+    --input: 217 30% 22%;
     --ring: 230 85% 65%;
     
     /* Sidebar overrides */
-    --sidebar-background: 240 10% 6%;
-    --sidebar-foreground: 210 20% 98%;
+    --sidebar-background: 217 33% 17%;
+    --sidebar-foreground: 210 40% 96%;
     --sidebar-primary: 230 85% 65%;
-    --sidebar-primary-foreground: 240 10% 4%;
-    --sidebar-accent: 240 5% 14%;
-    --sidebar-accent-foreground: 210 20% 98%;
-    --sidebar-border: 240 5% 15%;
+    --sidebar-primary-foreground: 222 47% 11%;
+    --sidebar-accent: 222 47% 11%;
+    --sidebar-accent-foreground: 210 40% 96%;
+    --sidebar-border: 217 30% 22%;
     --sidebar-ring: 230 85% 65%;
 
     /* Brand variables in Dark Mode */
@@ -168,8 +168,8 @@
   }
   
   .dark .gradient-hero {
-    /* Dark Mode: Deep dark space aesthetic */
-    background: linear-gradient(135deg, hsl(240 10% 2%) 0%, hsl(262 50% 6%) 50%, hsl(240 10% 2%) 100%);
+    /* Dark Mode: Deep, soothing midnight gradient highlight */
+    background: radial-gradient(120% 120% at 50% 0%, hsl(var(--ss-primary) / 0.1) 0%, hsl(var(--background)) 100%);
   }
 
   .gradient-card {
@@ -178,8 +178,8 @@
   }
 
   .dark .gradient-card {
-    /* Dark Mode: Sleek metal elevation */
-    background: linear-gradient(135deg, hsl(var(--card)) 0%, hsl(240 10% 8%) 100%);
+    /* Dark Mode: Sleek, soothing dark elevation */
+    background: linear-gradient(135deg, hsl(var(--card)) 0%, hsl(222 47% 13%) 100%);
   }
 
   .gradient-accent {
@@ -219,18 +219,18 @@
   }
 
   .dark .glass {
-    background: rgba(14, 14, 18, 0.5);
+    background: rgba(30, 41, 59, 0.45);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.07);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25), 0 1px 2px rgba(0, 0, 0, 0.15);
   }
 
   .dark .glass-dark {
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(15, 23, 42, 0.65);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.06);
   }
 }
 
