@@ -1,6 +1,17 @@
 import { getDb } from "./connection";
 import { creditTransactions, profiles } from "@db/schema";
-import { eq, desc } from "drizzle-orm";
+import { eq, desc, and } from "drizzle-orm";
+
+// Check if user has claimed signup bonus
+export async function hasClaimedSignupBonus(userId: number): Promise<boolean> {
+  const transaction = await getDb().query.creditTransactions.findFirst({
+    where: and(
+      eq(creditTransactions.userId, userId),
+      eq(creditTransactions.type, "signup_bonus")
+    ),
+  });
+  return !!transaction;
+}
 
 // Get credit transactions for a user
 export async function findCreditTransactions(userId: number, limit: number = 50) {

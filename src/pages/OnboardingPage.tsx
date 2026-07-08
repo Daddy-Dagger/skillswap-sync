@@ -95,12 +95,29 @@ export default function OnboardingPage() {
   };
 
   const handleFinish = async () => {
+    if (!headline.trim()) {
+      toast.error("Headline is required");
+      return;
+    }
+    if (headline.trim().length < 2) {
+      toast.error("Headline must be at least 2 characters");
+      return;
+    }
+    if (!bio.trim()) {
+      toast.error("Bio is required");
+      return;
+    }
+    if (bio.trim().length < 3) {
+      toast.error("Bio must be at least 3 characters");
+      return;
+    }
+
     setIsSubmitting(true);
     try {
       // Save profile
       await updateProfile.mutateAsync({
-        headline: headline || undefined,
-        bio: bio || undefined,
+        headline: headline,
+        bio: bio,
         location: location || undefined,
         availability: availability as any,
         yearsOfExperience: yearsOfExperience as any,
@@ -176,22 +193,28 @@ export default function OnboardingPage() {
 
                 <div className="space-y-4">
                   <div>
-                    <Label>Headline *</Label>
+                    <Label htmlFor="headline">Headline *</Label>
                     <Input
+                      id="headline"
                       placeholder="e.g., Frontend Developer & UI Designer"
                       value={headline}
                       onChange={(e) => setHeadline(e.target.value)}
                       className="mt-1.5"
+                      required
+                      minLength={2}
                     />
                   </div>
 
                   <div>
-                    <Label>Bio</Label>
+                    <Label htmlFor="bio">Bio *</Label>
                     <Textarea
+                      id="bio"
                       placeholder="Tell us about yourself, your goals, and what you're looking for..."
                       value={bio}
                       onChange={(e) => setBio(e.target.value)}
                       className="mt-1.5 min-h-[100px]"
+                      required
+                      minLength={3}
                     />
                   </div>
 
@@ -438,7 +461,27 @@ export default function OnboardingPage() {
 
               {step < totalSteps ? (
                 <Button
-                  onClick={() => setStep((s) => s + 1)}
+                  onClick={() => {
+                    if (step === 1) {
+                      if (!headline.trim()) {
+                        toast.error("Headline is required");
+                        return;
+                      }
+                      if (headline.trim().length < 2) {
+                        toast.error("Headline must be at least 2 characters");
+                        return;
+                      }
+                      if (!bio.trim()) {
+                        toast.error("Bio is required");
+                        return;
+                      }
+                      if (bio.trim().length < 3) {
+                        toast.error("Bio must be at least 3 characters");
+                        return;
+                      }
+                    }
+                    setStep((s) => s + 1);
+                  }}
                   className="gap-2 gradient-accent text-white"
                 >
                   Next <ArrowRight className="w-4 h-4" />

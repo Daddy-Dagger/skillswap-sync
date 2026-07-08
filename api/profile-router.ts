@@ -24,8 +24,8 @@ export const profileRouter = createRouter({
   update: authedQuery
     .input(
       z.object({
-        headline: z.string().max(160).optional(),
-        bio: z.string().max(2000).optional(),
+        headline: z.string().min(2, "Headline must be at least 2 characters").max(160).optional(),
+        bio: z.string().min(3, "Bio must be at least 3 characters").max(2000).optional(),
         location: z.string().max(100).optional(),
         timezone: z.string().max(50).optional(),
         githubUrl: z.string().url().max(255).optional(),

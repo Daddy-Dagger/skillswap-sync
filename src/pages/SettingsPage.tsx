@@ -46,9 +46,26 @@ export default function SettingsPage() {
   });
 
   const handleSave = () => {
+    if (!headline.trim()) {
+      toast.error("Headline is required");
+      return;
+    }
+    if (headline.trim().length < 2) {
+      toast.error("Headline must be at least 2 characters");
+      return;
+    }
+    if (!bio.trim()) {
+      toast.error("Bio is required");
+      return;
+    }
+    if (bio.trim().length < 3) {
+      toast.error("Bio must be at least 3 characters");
+      return;
+    }
+
     updateProfile.mutate({
-      headline: headline || undefined,
-      bio: bio || undefined,
+      headline: headline,
+      bio: bio,
       location: location || undefined,
       githubUrl: githubUrl || undefined,
       linkedinUrl: linkedinUrl || undefined,
@@ -73,21 +90,27 @@ export default function SettingsPage() {
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
-            <Label>Headline</Label>
+            <Label htmlFor="headline">Headline *</Label>
             <Input
+              id="headline"
               value={headline}
               onChange={(e) => setHeadline(e.target.value)}
               placeholder="e.g., Frontend Developer & UI Designer"
               className="mt-1.5"
+              required
+              minLength={2}
             />
           </div>
           <div>
-            <Label>Bio</Label>
+            <Label htmlFor="bio">Bio *</Label>
             <Input
+              id="bio"
               value={bio}
               onChange={(e) => setBio(e.target.value)}
               placeholder="Tell us about yourself..."
               className="mt-1.5"
+              required
+              minLength={3}
             />
           </div>
           <div>
