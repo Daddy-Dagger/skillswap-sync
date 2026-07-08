@@ -24,8 +24,8 @@ export const notificationRouter = createRouter({
   // Mark as read
   markRead: authedQuery
     .input(z.object({ notificationId: z.number() }))
-    .mutation(async ({ input }) => {
-      await markNotificationRead(input.notificationId);
+    .mutation(async ({ ctx, input }) => {
+      await markNotificationRead(input.notificationId, ctx.user.id);
       return { success: true };
     }),
 

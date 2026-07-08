@@ -52,11 +52,16 @@ export async function createNotification(data: {
 }
 
 // Mark notification as read
-export async function markNotificationRead(notificationId: number) {
+export async function markNotificationRead(notificationId: number, userId: number) {
   await getDb()
     .update(notifications)
     .set({ isRead: true })
-    .where(eq(notifications.id, notificationId));
+    .where(
+      and(
+        eq(notifications.id, notificationId),
+        eq(notifications.userId, userId)
+      )
+    );
 }
 
 // Mark all notifications as read for a user
