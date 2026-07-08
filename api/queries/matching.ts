@@ -1,6 +1,6 @@
 import { getDb } from "./connection";
 import { swipeActions, matches, profiles, users, userSkills, wantedSkills } from "@db/schema";
-import { eq, and, sql, desc } from "drizzle-orm";
+import { eq, and, or, sql, desc } from "drizzle-orm";
 
 // Record a swipe action
 export async function recordSwipe(data: {
@@ -32,12 +32,15 @@ export async function checkMutualMatch(
   userBId: number
 ): Promise<boolean> {
   const db = getDb();
-  // Check if userB liked userA
+  // Check if userB liked or superliked userA
   const mutualLike = await db.query.swipeActions.findFirst({
     where: and(
       eq(swipeActions.swiperUserId, userBId),
       eq(swipeActions.swipedUserId, userAId),
-      eq(swipeActions.action, "like")
+      or(
+        eq(swipeActions.action, "like"),
+        eq(swipeActions.action, "superlike")
+      )
     ),
   });
   return !!mutualLike;
