@@ -160,7 +160,17 @@ export const contractRouter = createRouter({
         ),
       })
     )
-    .mutation(async ({ input }) => {
+    .mutation(async ({ ctx, input }) => {
+      const contract = await findContractById(input.contractId);
+      if (!contract) {
+        throw new TRPCError({ code: "NOT_FOUND", message: "Contract not found" });
+      }
+      if (
+        contract.initiatorUserId !== ctx.user.id &&
+        contract.recipientUserId !== ctx.user.id
+      ) {
+        throw new TRPCError({ code: "FORBIDDEN", message: "Not a participant" });
+      }
       await updateChecklist(input.contractId, input.checklist);
       return { success: true };
     }),
@@ -180,7 +190,17 @@ export const contractRouter = createRouter({
         ),
       })
     )
-    .mutation(async ({ input }) => {
+    .mutation(async ({ ctx, input }) => {
+      const contract = await findContractById(input.contractId);
+      if (!contract) {
+        throw new TRPCError({ code: "NOT_FOUND", message: "Contract not found" });
+      }
+      if (
+        contract.initiatorUserId !== ctx.user.id &&
+        contract.recipientUserId !== ctx.user.id
+      ) {
+        throw new TRPCError({ code: "FORBIDDEN", message: "Not a participant" });
+      }
       await updateMilestones(input.contractId, input.milestones);
       return { success: true };
     }),
@@ -198,6 +218,12 @@ export const contractRouter = createRouter({
       const contract = await findContractById(input.contractId);
       if (!contract) {
         throw new TRPCError({ code: "NOT_FOUND", message: "Contract not found" });
+      }
+      if (
+        contract.initiatorUserId !== ctx.user.id &&
+        contract.recipientUserId !== ctx.user.id
+      ) {
+        throw new TRPCError({ code: "FORBIDDEN", message: "Not a participant" });
       }
 
       await completeContract(input.contractId, input.rating, input.comment);
