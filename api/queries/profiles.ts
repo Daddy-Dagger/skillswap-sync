@@ -1,6 +1,6 @@
 import { getDb } from "./connection";
-import { profiles, users, userSkills, wantedSkills } from "@db/schema";
-import { eq, sql } from "drizzle-orm";
+import { profiles, users, userSkills, wantedSkills, swipeActions } from "@db/schema";
+import { eq, sql, and, ne, isNull } from "drizzle-orm";
 
 // Find profile by user ID
 export async function findProfileByUserId(userId: number) {
@@ -94,7 +94,7 @@ export async function markUserOnboarded(userId: number) {
     .where(eq(users.id, userId));
 }
 
-// Find profiles for discovery/swipe (excluding current user)
+// Find profiles for discovery/swipe (excluding current user and already swiped profiles)
 export async function findProfilesForDiscovery(userId: number, limit: number = 20) {
   const db = getDb();
 
@@ -115,7 +115,20 @@ export async function findProfilesForDiscovery(userId: number, limit: number = 2
     })
     .from(profiles)
     .innerJoin(users, eq(profiles.userId, users.id))
-    .where(sql`${profiles.userId} != ${userId} AND ${profiles.isPublic} = true`)
+    .leftJoin(
+      swipeActions,
+      and(
+        eq(swipeActions.swipedUserId, profiles.userId),
+        eq(swipeActions.swiperUserId, userId)
+      )
+    )
+    .where(
+      and(
+        ne(profiles.userId, userId),
+        eq(profiles.isPublic, true),
+        isNull(swipeActions.id)
+      )
+    )
     .limit(limit);
 
   return results;
