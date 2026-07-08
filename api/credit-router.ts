@@ -1,9 +1,11 @@
 import { z } from "zod";
+import { TRPCError } from "@trpc/server";
 import { createRouter, authedQuery } from "./middleware";
 import {
   findCreditTransactions,
   getCreditBalance,
   addCredits,
+  hasClaimedSignupBonus,
 } from "./queries/credits";
 
 export const creditRouter = createRouter({
@@ -22,17 +24,20 @@ export const creditRouter = createRouter({
 
   // Award signup bonus (idempotent - can only be claimed once)
   claimSignupBonus: authedQuery.mutation(async ({ ctx }) => {
-    const balance = await getCreditBalance(ctx.user.id);
-    // If balance is 0, give signup bonus
-    if (balance === 0) {
-      await addCredits({
-        userId: ctx.user.id,
-        amount: 50,
-        type: "signup_bonus",
-        description: "Welcome bonus for joining SkillSwap Sync!",
+    const hasClaimed = await hasClaimedSignupBonus(ctx.user.id);
+    if (hasClaimed) {
+      throw new TRPCError({
+        code: "BAD_REQUEST",
+        message: "Signup bonus has already been claimed",
       });
-      return { awarded: true, amount: 50 };
     }
-    return { awarded: false, balance };
+
+    await addCredits({
+      userId: ctx.user.id,
+      amount: 50,
+      type: "signup_bonus",
+      description: "Welcome bonus for joining SkillSwap Sync!",
+    });
+    return { awarded: true, amount: 50 };
   }),
 });
