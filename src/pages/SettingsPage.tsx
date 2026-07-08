@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { trpc } from "@/providers/trpc";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -19,12 +19,23 @@ export default function SettingsPage() {
   const { data: profileData } = trpc.profile.me.useQuery();
   const utils = trpc.useUtils();
 
-  const [headline, setHeadline] = useState(profileData?.profile?.headline ?? "");
-  const [bio, setBio] = useState(profileData?.profile?.bio ?? "");
-  const [location, setLocation] = useState(profileData?.profile?.location ?? "");
-  const [githubUrl, setGithubUrl] = useState(profileData?.profile?.githubUrl ?? "");
-  const [linkedinUrl, setLinkedinUrl] = useState(profileData?.profile?.linkedinUrl ?? "");
-  const [portfolioUrl, setPortfolioUrl] = useState(profileData?.profile?.portfolioUrl ?? "");
+  const [headline, setHeadline] = useState("");
+  const [bio, setBio] = useState("");
+  const [location, setLocation] = useState("");
+  const [githubUrl, setGithubUrl] = useState("");
+  const [linkedinUrl, setLinkedinUrl] = useState("");
+  const [portfolioUrl, setPortfolioUrl] = useState("");
+
+  useEffect(() => {
+    if (profileData?.profile) {
+      setHeadline(profileData.profile.headline ?? "");
+      setBio(profileData.profile.bio ?? "");
+      setLocation(profileData.profile.location ?? "");
+      setGithubUrl(profileData.profile.githubUrl ?? "");
+      setLinkedinUrl(profileData.profile.linkedinUrl ?? "");
+      setPortfolioUrl(profileData.profile.portfolioUrl ?? "");
+    }
+  }, [profileData]);
 
   const updateProfile = trpc.profile.update.useMutation({
     onSuccess: () => {
