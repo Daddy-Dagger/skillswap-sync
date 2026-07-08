@@ -1,0 +1,293 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Neutral Light Theme (Slate/Blue-grey base) */
+    --background: 210 40% 98%; /* Soft slate-white for layout background */
+    --foreground: 224 71.4% 4.1%; /* Deep slate-black (#020617) */
+    
+    --card: 0 0% 100%; /* Pure white for card panels */
+    --card-foreground: 224 71.4% 4.1%;
+    
+    --popover: 0 0% 100%;
+    --popover-foreground: 224 71.4% 4.1%;
+    
+    /* Brand Primary: Premium Indigo with WCAG AA compliance (contrast > 5.5:1) */
+    --primary: 230 70% 48%; /* #2442e3 */
+    --primary-foreground: 0 0% 100%;
+    
+    --secondary: 215 15% 95%; /* Soft Slate-100 (#f1f5f9) */
+    --secondary-foreground: 220 40% 16%; /* Deep Slate-800 (#1e293b) */
+    
+    /* Muted states with high legibility (contrast > 5.5:1) */
+    --muted: 215 15% 95%;
+    --muted-foreground: 220 10% 36%; /* Slate-600 (#4a5568) */
+    
+    --accent: 215 15% 95%;
+    --accent-foreground: 220 40% 16%;
+    
+    /* Destructive/Danger states */
+    --destructive: 346.8 84.1% 48.2%; /* Rose-600 */
+    --destructive-foreground: 0 0% 100%;
+    
+    /* Semantic Success & Warning States */
+    --success: 160 84% 39%; /* Emerald-600 */
+    --success-foreground: 0 0% 100%;
+    
+    --warning: 38 92% 50%; /* Amber-500 */
+    --warning-foreground: 0 0% 100%;
+    
+    /* Borders & Inputs */
+    --border: 215 15% 89%; /* Light slate border (#e2e8f0) */
+    --input: 215 15% 89%;
+    --ring: 230 70% 48%; /* Accent ring color */
+    
+    --radius: 0.625rem; /* 10px */
+    
+    /* Sidebar styling overrides */
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 220 40% 16%;
+    --sidebar-primary: 230 70% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 215 15% 95%;
+    --sidebar-accent-foreground: 220 40% 16%;
+    --sidebar-border: 215 15% 89%;
+    --sidebar-ring: 230 70% 48%;
+
+    /* Brand variables (mapped to the theme for consistency) */
+    --ss-primary: 230 70% 48%;
+    --ss-primary-light: 230 70% 95%;
+    --ss-accent: 262 70% 52%; /* Brand Purple */
+    --ss-success: 160 84% 39%;
+    --ss-warning: 38 92% 50%;
+    --ss-danger: 346.8 84.1% 48.2%;
+    --ss-credit: 45 93% 50%;
+  }
+
+  .dark {
+    /* Premium Dark Theme */
+    --background: 240 10% 4%; /* Dark Slate background (#0a0a0c) */
+    --foreground: 210 20% 98%; /* Soft white (#f8fafc) */
+    
+    --card: 240 10% 6%; /* Card dark elevation (#0e0e11) */
+    --card-foreground: 210 20% 98%;
+    
+    --popover: 240 10% 6%;
+    --popover-foreground: 210 20% 98%;
+    
+    /* Vibrant brand color for dark mode */
+    --primary: 230 85% 65%; /* Bright indigo */
+    --primary-foreground: 240 10% 4%;
+    
+    --secondary: 240 5% 14%;
+    --secondary-foreground: 210 20% 98%;
+    
+    --muted: 240 5% 14%;
+    --muted-foreground: 240 5% 65%; /* Slate-400 */
+    
+    --accent: 240 5% 14%;
+    --accent-foreground: 210 20% 98%;
+    
+    --destructive: 0 63% 40%;
+    --destructive-foreground: 0 0% 98%;
+    
+    --success: 160 70% 45%;
+    --success-foreground: 0 0% 100%;
+    
+    --warning: 38 92% 55%;
+    --warning-foreground: 0 0% 100%;
+    
+    --border: 240 5% 15%; /* Muted dark border */
+    --input: 240 5% 15%;
+    --ring: 230 85% 65%;
+    
+    /* Sidebar overrides */
+    --sidebar-background: 240 10% 6%;
+    --sidebar-foreground: 210 20% 98%;
+    --sidebar-primary: 230 85% 65%;
+    --sidebar-primary-foreground: 240 10% 4%;
+    --sidebar-accent: 240 5% 14%;
+    --sidebar-accent-foreground: 210 20% 98%;
+    --sidebar-border: 240 5% 15%;
+    --sidebar-ring: 230 85% 65%;
+
+    /* Brand variables in Dark Mode */
+    --ss-primary: 230 85% 65%;
+    --ss-primary-light: 230 85% 15%;
+    --ss-accent: 262 80% 68%;
+    --ss-success: 160 70% 45%;
+    --ss-warning: 38 92% 55%;
+    --ss-danger: 0 63% 40%;
+    --ss-credit: 45 93% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border transition-colors duration-150;
+  }
+  body {
+    @apply bg-background text-foreground antialiased selection:bg-primary/20 selection:text-foreground font-sans;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  /* Typography Scale Rules */
+  h1, h2, h3, h4, h5, h6, .font-heading {
+    font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+    @apply text-foreground tracking-tight font-semibold;
+  }
+
+  h1 {
+    @apply text-4xl md:text-5xl lg:text-6xl font-extrabold leading-[1.1] mb-6;
+  }
+
+  h2 {
+    @apply text-2xl md:text-3xl lg:text-4xl font-bold leading-snug;
+  }
+
+  h3 {
+    @apply text-xl md:text-2xl font-bold leading-snug;
+  }
+
+  h4 {
+    @apply text-lg font-semibold leading-normal;
+  }
+  
+  p, span, li, label, input, select, textarea {
+    @apply tracking-normal leading-relaxed;
+  }
+}
+
+@layer utilities {
+  /* Dynamic Background Gradients: Adapt to theme contrast */
+  .gradient-hero {
+    /* Light Mode: Clean background with soft radial highlight */
+    background: radial-gradient(120% 120% at 50% 0%, hsl(var(--ss-primary) / 0.05) 0%, hsl(var(--background)) 100%);
+  }
+  
+  .dark .gradient-hero {
+    /* Dark Mode: Deep dark space aesthetic */
+    background: linear-gradient(135deg, hsl(240 10% 2%) 0%, hsl(262 50% 6%) 50%, hsl(240 10% 2%) 100%);
+  }
+
+  .gradient-card {
+    /* Light Mode: Elegant top-down gradient */
+    background: linear-gradient(180deg, hsl(var(--card)) 0%, hsl(var(--secondary) / 0.3) 100%);
+  }
+
+  .dark .gradient-card {
+    /* Dark Mode: Sleek metal elevation */
+    background: linear-gradient(135deg, hsl(var(--card)) 0%, hsl(240 10% 8%) 100%);
+  }
+
+  .gradient-accent {
+    /* Interactive accents stay vibrant */
+    background: linear-gradient(135deg, hsl(var(--ss-primary)) 0%, hsl(var(--ss-accent)) 100%);
+  }
+
+  .text-gradient {
+    background: linear-gradient(135deg, hsl(var(--ss-primary)) 0%, hsl(var(--ss-accent)) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .glow-primary {
+    box-shadow: 0 0 20px hsl(var(--ss-primary) / 0.15), 0 0 60px hsl(var(--ss-primary) / 0.05);
+  }
+
+  .glow-accent {
+    box-shadow: 0 0 20px hsl(var(--ss-accent) / 0.15), 0 0 60px hsl(var(--ss-accent) / 0.05);
+  }
+
+  /* Theme-adaptive glass card layouts */
+  .glass {
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02), 0 1px 2px rgba(0, 0, 0, 0.01);
+  }
+
+  .glass-dark {
+    background: rgba(15, 23, 42, 0.04);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  .dark .glass {
+    background: rgba(14, 14, 18, 0.5);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
+  }
+
+  .dark .glass-dark {
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+}
+
+/* Custom modern scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground) / 0.25);
+  border-radius: 4px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground) / 0.4);
+  border-radius: 4px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+/* Elegant micro-animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 0.95; }
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2.5s ease-in-out infinite;
+}
+
+.animate-slide-up {
+  animation: slide-up 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
